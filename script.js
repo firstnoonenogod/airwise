@@ -66,7 +66,6 @@ const amphoeCoordinates = {
     "เฉลิมพระเกียรติ": { lat: 8.1831, lon: 100.0631 }
 };
 
-// คลังเก็บข้อมูลฝุ่นที่ดึงมาได้ทั้งหมดเพื่อเอาไปใช้คำนวณหน้าแรก
 let allAmphoeData = [];
 
 // ฟังก์ชันหลักดึงค่าฝุ่นรายอำเภอ (แท็บที่ 2)
@@ -93,16 +92,21 @@ if (amphoeSelect) {
             let statusText = "";
             let statusColor = "";
             let adviceScript = "";
+            let adviceScriptEn = ""; // 🌟 เพิ่มตัวแปรสำหรับเก็บภาษาอังกฤษ
 
+            // 🌟 กำหนดคำวิเคราะห์ทั้ง 2 ภาษาตามระดับฝุ่นจริง
             if (pm25Value <= 15) {
                 statusText = "อากาศดีมาก"; statusColor = "#10b981";
                 adviceScript = `ขณะนี้อำเภอ${selectedAmphoe} มีปริมาณฝุ่นเพียง ${pm25Value} ไมโครกรัมต่อลูกบาศก์เมตร สภาพอากาศบริสุทธิ์ดีเยี่ยมค่ะ เหมาะสมกับการทำกิจกรรมกลางแจ้งได้อย่างปลอดภัยหายห่วงเลยนะคะ`;
+                adviceScriptEn = `Currently, the PM 2.5 level in ${selectedAmphoe} is ${pm25Value} micrograms per cubic meter. The air quality is excellent. It is perfectly safe to enjoy outdoor activities.`;
             } else if (pm25Value <= 37.5) {
                 statusText = "อากาศปานกลาง"; statusColor = "#f59e0b";
                 adviceScript = `ตรวจสอบพบปริมาณฝุ่นที่อำเภอ${selectedAmphoe} อยู่ที่ ${pm25Value} ไมโครกรัมต่อลูกบาศก์เมตร สภาพอากาศอยู่ในเกณฑ์ปานกลางค่ะ ประชาชนทั่วไปใช้ชีวิตได้ตามปกติ แต่สำหรับกลุ่มเสี่ยงควรลดระยะเวลาทำกิจกรรมกลางแจ้งลงนิดหน่อยนะคะ`;
+                adviceScriptEn = `The PM 2.5 level in ${selectedAmphoe} is ${pm25Value} micrograms per cubic meter. The air quality is moderate. The general public can go about normal lives, but sensitive groups should reduce outdoor activities.`;
             } else {
                 statusText = "เริ่มมีผลกระทบ"; statusColor = "#ef4444";
                 adviceScript = `แจ้งเตือนค่ะ! อำเภอ${selectedAmphoe} มีปริมาณฝุ่นสูงถึง ${pm25Value} ไมโครกรัมต่อลูกบาศก์เมตร เริ่มมีผลกระทบต่อสุขภาพแล้ว แนะนำให้หลีกเลี่ยงกิจกรรมกลางแจ้ง และอย่าลืมสวมหน้ากากอนามัยป้องกันฝุ่นทุกครั้งนะคะ`;
+                adviceScriptEn = `Warning! The PM 2.5 level in ${selectedAmphoe} is as high as ${pm25Value} micrograms per cubic meter. This is unhealthy. Please avoid outdoor activities and always wear a mask.`;
             }
 
             document.getElementById('pm-badge').innerText = statusText;
@@ -111,7 +115,23 @@ if (amphoeSelect) {
             const analysisZone = document.getElementById('analysis-zone');
             analysisZone.style.opacity = "1";
             analysisZone.style.pointerEvents = "auto";
+            
+            // แสดงผลภาษาไทย
             document.getElementById('protection-text').innerText = adviceScript; 
+            
+            // 🌟 สร้างและแสดงผลข้อความภาษาอังกฤษใต้ภาษาไทย
+            let engElement = document.getElementById('protection-text-en');
+            if (!engElement) {
+                engElement = document.createElement('p');
+                engElement.id = 'protection-text-en';
+                engElement.style.color = '#2563eb';
+                engElement.style.marginTop = '12px';
+                engElement.style.fontStyle = 'italic';
+                engElement.style.fontWeight = '500';
+                document.getElementById('protection-text').parentNode.appendChild(engElement);
+            }
+            engElement.innerText = "🇬🇧 " + adviceScriptEn; // ใส่ไอคอนธงชาติอังกฤษให้ดูสวยงาม
+
             document.getElementById('btn-speak').disabled = false;
 
             if (window.speechSynthesis) window.speechSynthesis.cancel();
@@ -131,7 +151,6 @@ if (amphoeSelect) {
 async function loadDashboardData() {
     if (OPENWEATHER_API_KEY === 'วางรหัส API KEY ของคุณตรงนี้') return;
 
-    // สุ่มดึงข้อมูลมาสัก 6 อำเภอหลักเพื่อประมวลผลความเร็ว (หรือเพิ่มได้ตามต้องการ)
     const sampleAmphoes = ["เมือง", "ทุ่งสง", "ท่าศาลา", "ปากพนัง", "สิชล", "หัวไทร"];
     let totalPM = 0;
     let count = 0;
@@ -153,7 +172,6 @@ async function loadDashboardData() {
     }
 
     if (count > 0) {
-        // 1. คำนวณและแสดงค่าเฉลี่ยจังหวัด
         const avgPM = Math.round(totalPM / count);
         document.getElementById('avg-pm-display').innerHTML = `${avgPM} <span style="font-size: 1.2rem;">µg/m³</span>`;
         
@@ -167,8 +185,7 @@ async function loadDashboardData() {
             badge.innerText = "เริ่มมีผลกระทบ"; card.style.backgroundColor = "#ef4444";
         }
 
-        // 2. จัดอันดับ Top 3 ฝุ่นสูงสุด
-        rankList.sort((a, b) => b.pm - a.pm); // เรียงจากมากไปน้อย
+        rankList.sort((a, b) => b.pm - a.pm); 
         const top3 = rankList.slice(0, 3);
         
         let listHTML = "";
@@ -186,32 +203,68 @@ async function loadDashboardData() {
 }
 
 // ==========================================
-// 4. ระบบเสียงอ่านพากย์ตัวละคร
+// 4. ระบบเสียงอ่านพากย์ตัวละคร (🌟 อ่านภาษาอังกฤษ)
 // ==========================================
 const btnSpeak = document.getElementById('btn-speak');
 if (btnSpeak && 'speechSynthesis' in window) {
+
     btnSpeak.addEventListener('click', () => {
         if (window.speechSynthesis.speaking) {
             window.speechSynthesis.cancel();
             return;
         }
-        const text = document.getElementById('protection-text').innerText;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'th-TH';
-        utterance.rate = 1.1;
+        
+        // 🌟 ดึงข้อมูลจากข้อความภาษาอังกฤษที่เราสร้างขึ้นมาใหม่
+        const engElement = document.getElementById('protection-text-en');
+        if (!engElement) return;
+        
+        // ลบไอคอนธงชาติออกก่อนส่งไปให้ระบบพูด
+        const textToSpeak = engElement.innerText.replace("🇬🇧 ", "");
+        
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = 'en-US'; // 🌟 บังคับเสียงภาษาอังกฤษ
+        utterance.rate = 1.2;     // ปรับให้พูดช้าลงเล็กน้อยให้ฟังง่าย
+        utterance.volume = 1.0; 
 
+        // ดึงคลังเสียง และค้นหาเสียงภาษาอังกฤษในเครื่อง
+        const availableVoices = window.speechSynthesis.getVoices();
+        const engVoice = availableVoices.find(v => v.lang === 'en-US' || v.lang.includes('en'));
+        
+        if (engVoice) {
+            utterance.voice = engVoice;
+        }
+
+        // สลับรูปภาพขณะพูด
         utterance.onstart = () => {
-            document.getElementById('character-img').src = 'assets/character-talking.png';
+            const charImg = document.getElementById('character-img');
+            if (charImg) charImg.src = 'assets/character-talking.png';
             btnSpeak.innerHTML = '🛑 กดเพื่อหยุดพูด';
         };
+
         utterance.onend = () => {
-            document.getElementById('character-img').src = 'assets/character-idle.png';
+            const charImg = document.getElementById('character-img');
+            if (charImg) charImg.src = 'assets/character-idle.png';
             btnSpeak.innerHTML = '🔊 กดเพื่อฟังการวิเคราะห์จากนกฮูก';
         };
+
+        utterance.onerror = (event) => {
+            console.error('Speech Error:', event);
+            const charImg = document.getElementById('character-img');
+            if (charImg) charImg.src = 'assets/character-idle.png';
+            btnSpeak.innerHTML = '🔊 กดเพื่อฟังการวิเคราะห์จากนกฮูก';
+        };
+
+        window.speechSynthesis.cancel();
         window.speechSynthesis.speak(utterance);
     });
 }
 
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.getVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+    }
+}
 // ==========================================
 // 5. ระบบแผนที่พื้นฐาน
 // ==========================================
@@ -227,5 +280,5 @@ function initMap() {
 
 window.addEventListener('DOMContentLoaded', () => {
     initMap();
-    loadDashboardData(); // สั่งให้โหลดข้อมูลแดชบอร์ดทันทีเมื่อเปิดเว็บ
+    loadDashboardData(); 
 });
