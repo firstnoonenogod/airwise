@@ -38,7 +38,7 @@ function switchToTab(targetId) {
 // ==========================================
 
 // 🔑 นำรหัส API Key ของคุณมาใส่ตรงนี้เหมือนเดิมครับ
-const OPENWEATHER_API_KEY = 'วางรหัส API KEY ของคุณตรงนี้'; 
+const OPENWEATHER_API_KEY = '403eca128baf67c32147f04fe74a8a71'; 
 
 const amphoeCoordinates = {
     "เมือง": { lat: 8.4304, lon: 99.9631 },
