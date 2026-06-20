@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRWISE - ระบบรายงานคุณภาพอากาศนครศรีธรรมราช</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet text">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="logo-box">
+                <span class="logo-icon">💨</span>
+                <span class="logo-text">AIRWISE</span>
+            </div>
+            <div class="logo-subtext">PM2.5 REALTIME MONITOR<br>NAKHON SI THAMMARAT</div>
+        </div>
+
+        <nav>
+            <a href="#home-section" class="nav-link active">🏠 หน้าแรก</a>
+            <a href="#air-quality-section" class="nav-link">📊 ข้อมูลคุณภาพอากาศ</a>
+            <a href="#map-section" class="nav-link">🗺️ แผนที่มลพิษ</a>
+            <a href="#info-section" class="nav-link">📝 สาเหตุและคำแนะนำ</a>
+        </nav>
+
+        <div class="header-right">
+            <img class="school-logo" src="assets/school-logo.png" alt="โลโก้โรงเรียน">
+            <div class="profile-avatar">👨‍💻</div>
+        </div>
+    </header>
+
+    <main>
+
+        <section id="home-section" class="content-section">
+            <div class="hero-banner">
+                <div class="hero-content">
+                    <span class="badge">NAKHON SI THAMMARAT PM2.5 WATCH</span>
+                    <h1>อากาศบริสุทธิ์<br>เพื่อชุมชนสุขภาพดี</h1>
+                    <p>นวัตกรรมระบบฐานข้อมูลภูมิสารสนเทศและการรายงานสถิติฝุ่นละอองขนาดเล็กเรียลไทม์ ครอบคลุมพื้นที่ทั้ง 23 อำเภอ ขับเคลื่อนการเฝ้าระวังโดยเครือข่ายโรงเรียนในจังหวัดนครศรีธรรมราช</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="switchToTab('#air-quality-section')">🔍 ตรวจสอบรายอำเภอ</button>
+                        <button class="btn btn-secondary" onclick="switchToTab('#map-section')">🗺️ เปิดแผนที่ขนาดใหญ่</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2.5rem;">
+                
+                <div class="info-box" style="border-top: 4px solid #10b981;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">🌍 สถานการณ์ภาพรวมจังหวัด</h3>
+                    <div id="provincial-card" style="background: #10b981; color: white; padding: 1.5rem; border-radius: 12px; text-align: center; margin-bottom: 1rem;">
+                        <p style="font-size: 0.9rem; opacity: 0.9;">ค่าเฉลี่ยฝุ่นรวมทั้งจังหวัด</p>
+                        <h2 id="avg-pm-display" style="font-size: 3rem; color: white; margin: 0.3rem 0;">-- <span style="font-size: 1.2rem;">µg/m³</span></h2>
+                        <span id="avg-status-badge" style="background: rgba(255,255,255,0.2); padding: 0.2rem 1rem; border-radius: 20px; font-size: 0.85rem;">กำลังคำนวณ...</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: #64748b; line-height: 1.8;">
+                        <p>📍 ข้อมูลอัปเดต: เรียลไทม์จากระบบเครือข่าย</p>
+                        <p>👥 ครอบคลุมพื้นที่การประมวลผล: ทั้ง 23 อำเภอ</p>
+                    </div>
+                </div>
+
+                <div class="info-box" style="border-top: 4px solid #ef4444;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">⚠️ พื้นที่เฝ้าระวังค่าฝุ่นสูงสุด (Top 3)</h3>
+                    <div id="top-dangerous-list" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                        <p style="color: #64748b; font-size: 0.95rem;">กำลังโหลดข้อมูลการจัดอันดับ...</p>
+                        </div>
+                </div>
+
+            </div>
+        </section>
+        <section id="air-quality-section" class="content-section" style="display: none;">
+            <div class="section-title">
+                <h2>📊 รายงานสถานการณ์ฝุ่นรายอำเภอ</h2>
+                <p>เลือกอำเภอที่คุณต้องการตรวจสอบเพื่อฟังสรุปผลวิเคราะห์จากน้อง Wisdom Owl</p>
+            </div>
+
+            <div class="air-monitor-grid">
+                <div class="monitor-box">
+                    <label for="amphoe-select" class="select-label">📌 เลือกอำเภอในจังหวัดนครศรีธรรมราช:</label>
+                    <select id="amphoe-select" class="custom-select">
+                        <option value="" disabled selected>-- กรุณาเลือกอำเภอ --</option>
+                        <option value="เมือง">อำเภอเมืองนครศรีธรรมราช</option>
+                        <option value="พรหมคีรี">▲ อำเภอพรหมคีรี</option>
+                        <option value="ลานสกา">▲ อำเภอลานสกา</option>
+                        <option value="ฉวาง">▲ อำเภอฉวาง</option>
+                        <option value="พิปูน">▲ อำเภอพิปูน</option>
+                        <option value="เชียรใหญ่">▲ อำเภอเชียรใหญ่</option>
+                        <option value="ชะอวด">▲ อำเภอชะอวด</option>
+                        <option value="ท่าศาลา">▲ อำเภอท่าศาลา</option>
+                        <option value="ทุ่งสง">▲ อำเภอทุ่งสง</option>
+                        <option value="นาบอน">▲ อำเภอนาบอน</option>
+                        <option value="ทุ่งใหญ่">▲ อำเภอทุ่งใหญ่</option>
+                        <option value="ปากพนัง">▲ อำเภอปากพนัง</option>
+                        <option value="ร่อนพิบูลย์">▲ อำเภอร่อนพิบูลย์</option>
+                        <option value="สิชล">▲ อำเภอสิชล</option>
+                        <option value="ขนอม">▲ อำเภอขนอม</option>
+                        <option value="หัวไทร">▲ อำเภอหัวไทร</option>
+                        <option value="บางขัน">▲ อำเภอบางขัน</option>
+                        <option value="ถ้ำพรรณรา">▲ อำเภอถ้ำพรรณรา</option>
+                        <option value="จุฬาภรณ์">▲ อำเภอจุฬาภรณ์</option>
+                        <option value="พระพรหม">▲ อำเภอพระพรหม</option>
+                        <option value="นบพิตำ">▲ อำเภอนบพิตำ</option>
+                        <option value="ช้างกลาง">▲ อำเภอช้างกลาง</option>
+                        <option value="เฉลิมพระเกียรที่">▲ อำเภอเฉลิมพระเกียรติ</option>
+                    </select>
+
+                    <div class="air-card-mini" id="air-result-card" style="display: none;">
+                        <h3 id="selected-amphoe-title">อำเภอ...</h3>
+                        <div class="pm-display-value"><span id="pm-num">0</span> <small>µg/m³</small></div>
+                        <div class="pm-status-badge" id="pm-badge">กำลังคำนวณ...</div>
+                    </div>
+                </div>
+
+                <div class="character-analysis-zone" id="analysis-zone" style="opacity: 0.5; pointer-events: none;">
+                    <div class="avatar-wrapper">
+                        <img id="character-img" src="assets/character-idle.png" alt="Wisdom Owl">
+                    </div>
+                    <div class="speech-bubble">
+                        <p id="protection-text">กรุณาเลือกอำเภอทางด้านซ้าย เพื่อให้น้อง Wisdom Owl เริ่มทำการวิเคราะห์สภาพอากาศและอ่านสคริปต์คำแนะนำให้ฟังค่ะ...</p>
+                        <button id="btn-speak" disabled>🔊 กดเพื่อฟังการวิเคราะห์</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="map-section" class="content-section" style="display: none;">
+            <div class="section-title">
+                <h2>🗺️ แผนที่พิกัดความหนาแน่นเชิงพื้นที่</h2>
+                <p>แสดงการกระจายตัวของมลพิษและฝุ่นละออง PM2.5 แบบเรียลไทม์</p>
+            </div>
+            <div id="map"></div>
+        </section>
+
+        <section id="info-section" class="content-section" style="display: none;">
+            <div class="section-title">
+                <h2>📝 สาเหตุและคำแนะนำในการป้องกันตัว</h2>
+            </div>
+            <div class="info-grid">
+                <div class="info-box">
+                    <h3>⚠️ สาเหตุหลักของฝุ่น PM2.5 ในพื้นที่</h3>
+                    <ul>
+                        <li>การเผาวัสดุและเศษพืชทางการเกษตรในที่โล่งแจ้ง</li>
+                        <li>มลพิษจากท่อไอเสียยานพาหนะในเขตชุมชนเมืองหนาแน่น</li>
+                        <li>สภาวะอากาศปิดและหมอกควันข้ามแดนจากภูมิภาคอื่น</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>💡 แนวทางปฏิบัติและคำแนะนำทั่วไป</h3>
+                    <ul>
+                        <li>ตรวจสอบค่าฝุ่นเป็นประจำผ่านทางหน้าเว็บ AIRWISE</li>
+                        <li>หลีกเลี่ยงกิจกรรมกลางแจ้งเมื่อค่าฝุ่นเปลี่ยนเป็นสีส้มหรือแดง</li>
+                        <li>สวมหน้ากากอนามัยชนิด N95 ทุกครั้งเมื่อจำเป็นต้องออกไปข้างนอก</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 AIRWISE - Nakhon Si Thammarat PM2.5 Realtime Monitor Project</p>
+            <p class="footer-sub">พัฒนาขึ้นเพื่อสืบสานนวัตกรรมข้อมูลสุขภาพของชุมชนและโรงเรียนในพื้นที่</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
