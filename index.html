@@ -23,11 +23,16 @@
             <div class="logo-subtext">PM2.5 REALTIME MONITOR<br>NAKHON SI THAMMARAT</div>
         </div>
 
-        <nav>
-            <a href="#home-section" class="nav-link active">🏠 หน้าแรก</a>
-            <a href="#air-quality-section" class="nav-link">📊 ข้อมูลคุณภาพอากาศ</a>
-            <a href="#map-section" class="nav-link">🗺️ แผนที่มลพิษ</a>
-            <a href="#info-section" class="nav-link">📝 สาเหตุและคำแนะนำ</a>
+        <nav style="display: flex; align-items: center; gap: 1rem;">
+            <a href="#home-section" class="nav-link active" id="nav-home">🏠 หน้าแรก</a>
+            <a href="#air-quality-section" class="nav-link" id="nav-air">📊 ข้อมูลคุณภาพอากาศ</a>
+            <a href="#map-section" class="nav-link" id="nav-map">🗺️ แผนที่มลพิษ</a>
+            <a href="#info-section" class="nav-link" id="nav-info">📝 สาเหตุและคำแนะนำ</a>
+            
+            <div class="lang-switcher" style="display: flex; gap: 0.2rem; background: #f1f5f9; padding: 0.3rem; border-radius: 20px; border: 1px solid #e2e8f0; margin-left: 0.5rem;">
+                <button id="btn-th" class="active" style="border: none; background: #2563eb; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; cursor: pointer; font-family: 'Kanit', sans-serif; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">TH</button>
+                <button id="btn-en" style="border: none; background: transparent; color: #64748b; padding: 0.3rem 0.8rem; border-radius: 15px; cursor: pointer; font-family: 'Kanit', sans-serif; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">EN</button>
+            </div>
         </nav>
 
         <div class="header-right">
@@ -37,53 +42,51 @@
     </header>
 
     <main>
-
         <section id="home-section" class="content-section">
             <div class="hero-banner">
                 <div class="hero-content">
                     <span class="badge">NAKHON SI THAMMARAT PM2.5 WATCH</span>
-                    <h1>อากาศบริสุทธิ์<br>เพื่อชุมชนสุขภาพดี</h1>
-                    <p>นวัตกรรมระบบฐานข้อมูลภูมิสารสนเทศและการรายงานสถิติฝุ่นละอองขนาดเล็กเรียลไทม์ ครอบคลุมพื้นที่ทั้ง 23 อำเภอ ขับเคลื่อนการเฝ้าระวังโดยเครือข่ายโรงเรียนในจังหวัดนครศรีธรรมราช</p>
+                    <h1 id="hero-title">อากาศบริสุทธิ์<br>เพื่อชุมชนสุขภาพดี</h1>
+                    <p id="hero-desc">นวัตกรรมระบบฐานข้อมูลภูมิสารสนเทศและการรายงานสถิติฝุ่นละอองขนาดเล็กเรียลไทม์ ครอบคลุมพื้นที่ทั้ง 23 อำเภอ ขับเคลื่อนการเฝ้าระวังโดยเครือข่ายโรงเรียนในจังหวัดนครศรีธรรมราช</p>
                     <div class="hero-buttons">
-                        <button class="btn btn-primary" onclick="switchToTab('#air-quality-section')">🔍 ตรวจสอบรายอำเภอ</button>
-                        <button class="btn btn-secondary" onclick="switchToTab('#map-section')">🗺️ เปิดแผนที่ขนาดใหญ่</button>
+                        <button class="btn btn-primary" id="btn-explore" onclick="switchToTab('#air-quality-section')">🔍 ตรวจสอบรายอำเภอ</button>
+                        <button class="btn btn-secondary" id="btn-map" onclick="switchToTab('#map-section')">🗺️ เปิดแผนที่ขนาดใหญ่</button>
                     </div>
                 </div>
             </div>
 
             <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2.5rem;">
-                
                 <div class="info-box" style="border-top: 4px solid #10b981;">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">🌍 สถานการณ์ภาพรวมจังหวัด</h3>
+                    <h3 id="dash-title1" style="font-size: 1.1rem; margin-bottom: 1rem;">🌍 สถานการณ์ภาพรวมจังหวัด</h3>
                     <div id="provincial-card" style="background: #10b981; color: white; padding: 1.5rem; border-radius: 12px; text-align: center; margin-bottom: 1rem;">
-                        <p style="font-size: 0.9rem; opacity: 0.9;">ค่าเฉลี่ยฝุ่นรวมทั้งจังหวัด</p>
+                        <p id="dash-desc1" style="font-size: 0.9rem; opacity: 0.9;">ค่าเฉลี่ยฝุ่นรวมทั้งจังหวัด</p>
                         <h2 id="avg-pm-display" style="font-size: 3rem; color: white; margin: 0.3rem 0;">-- <span style="font-size: 1.2rem;">µg/m³</span></h2>
                         <span id="avg-status-badge" style="background: rgba(255,255,255,0.2); padding: 0.2rem 1rem; border-radius: 20px; font-size: 0.85rem;">กำลังคำนวณ...</span>
                     </div>
                     <div style="font-size: 0.9rem; color: #64748b; line-height: 1.8;">
-                        <p>📍 ข้อมูลอัปเดต: เรียลไทม์จากระบบเครือข่าย</p>
-                        <p>👥 ครอบคลุมพื้นที่การประมวลผล: ทั้ง 23 อำเภอ</p>
+                        <p id="dash-update">📍 ข้อมูลอัปเดต: เรียลไทม์จากระบบเครือข่าย</p>
+                        <p id="dash-cover">👥 ครอบคลุมพื้นที่การประมวลผล: ทั้ง 23 อำเภอ</p>
                     </div>
                 </div>
 
                 <div class="info-box" style="border-top: 4px solid #ef4444;">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">⚠️ พื้นที่เฝ้าระวังค่าฝุ่นสูงสุด (Top 3)</h3>
+                    <h3 id="dash-title2" style="font-size: 1.1rem; margin-bottom: 1rem;">⚠️ พื้นที่เฝ้าระวังค่าฝุ่นสูงสุด (Top 3)</h3>
                     <div id="top-dangerous-list" style="display: flex; flex-direction: column; gap: 0.8rem;">
-                        <p style="color: #64748b; font-size: 0.95rem;">กำลังโหลดข้อมูลการจัดอันดับ...</p>
-                        </div>
+                        <p style="color: #64748b; font-size: 0.95rem;" id="loading-top3">กำลังโหลดข้อมูลการจัดอันดับ...</p>
+                    </div>
                 </div>
-
             </div>
         </section>
+
         <section id="air-quality-section" class="content-section" style="display: none;">
             <div class="section-title">
-                <h2>📊 รายงานสถานการณ์ฝุ่นรายอำเภอ</h2>
-                <p>เลือกอำเภอที่คุณต้องการตรวจสอบเพื่อฟังสรุปผลวิเคราะห์จากน้อง Wisdom Owl</p>
+                <h2 id="air-title">📊 รายงานสถานการณ์ฝุ่นรายอำเภอ</h2>
+                <p id="air-desc">เลือกอำเภอที่คุณต้องการตรวจสอบเพื่อฟังสรุปผลวิเคราะห์จากน้อง Wisdom Owl</p>
             </div>
 
             <div class="air-monitor-grid">
                 <div class="monitor-box">
-                    <label for="amphoe-select" class="select-label">📌 เลือกอำเภอในจังหวัดนครศรีธรรมราช:</label>
+                    <label for="amphoe-select" id="air-label" class="select-label">📌 เลือกอำเภอในจังหวัดนครศรีธรรมราช:</label>
                     <select id="amphoe-select" class="custom-select">
                         <option value="" disabled selected>-- กรุณาเลือกอำเภอ --</option>
                         <option value="เมือง">อำเภอเมืองนครศรีธรรมราช</option>
@@ -132,33 +135,96 @@
 
         <section id="map-section" class="content-section" style="display: none;">
             <div class="section-title">
-                <h2>🗺️ แผนที่พิกัดความหนาแน่นเชิงพื้นที่</h2>
-                <p>แสดงการกระจายตัวของมลพิษและฝุ่นละออง PM2.5 แบบเรียลไทม์</p>
+                <h2 id="map-title">🗺️ แผนที่พิกัดความหนาแน่นเชิงพื้นที่</h2>
+                <p id="map-desc">แสดงการกระจายตัวของมลพิษและฝุ่นละออง PM2.5 แบบเรียลไทม์</p>
             </div>
             <div id="map"></div>
         </section>
 
         <section id="info-section" class="content-section" style="display: none;">
             <div class="section-title">
-                <h2>📝 สาเหตุและคำแนะนำในการป้องกันตัว</h2>
+                <h2 id="info-main-title">📝 สาเหตุและคำแนะนำในการป้องกันตัว</h2>
             </div>
-            <div class="info-grid">
-                <div class="info-box">
-                    <h3>⚠️ สาเหตุหลักของฝุ่น PM2.5 ในพื้นที่</h3>
-                    <ul>
-                        <li>การเผาวัสดุและเศษพืชทางการเกษตรในที่โล่งแจ้ง</li>
-                        <li>มลพิษจากท่อไอเสียยานพาหนะในเขตชุมชนเมืองหนาแน่น</li>
-                        <li>สภาวะอากาศปิดและหมอกควันข้ามแดนจากภูมิภาคอื่น</li>
+            
+            <div class="info-grid" id="knowledge-grid">
+                
+                <div class="info-box" style="border-top-color: #0ea5e9;">
+                    <h3 class="zone-title" data-zone="1">🌊 1. โซนทะเล</h3>
+                    <p class="zone-sub" data-zone="1" style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">(ขนอม, สิชล, ท่าศาลา, ปากพนัง, หัวไทร, เชียรใหญ่)</p>
+                    <h4 class="cause-heading" style="color: #ef4444; margin-bottom: 0.5rem; font-size: 1rem;">⚠️ สาเหตุหลัก</h4>
+                    <ul class="cause-list" data-zone="1" style="margin-bottom: 1rem;">
+                        <li>เขม่าควันจากเครื่องยนต์เรือประมงและท่อไอเสียรถยนต์</li>
+                        <li>ฝุ่น ควัน และกลิ่นจากโรงงานแปรรูปปลา/อาหารสัตว์</li>
+                        <li>การเผาวัสดุเหลือใช้ทางการเกษตร</li>
+                    </ul>
+                    <h4 class="prevent-heading" style="color: #10b981; margin-bottom: 0.5rem; font-size: 1rem;">💡 วิธีป้องกันและแก้ไข</h4>
+                    <ul class="prevent-list" data-zone="1">
+                        <li>ตรวจสภาพเครื่องยนต์และใช้เชื้อเพลิงสะอาดลดควันดำ</li>
+                        <li>ติดตั้งระบบบำบัดอากาศในโรงงานและเพิ่มพื้นที่สีเขียว</li>
+                        <li>งดการเผาเศษวัสดุเกษตร เปลี่ยนเป็นทำปุ๋ยหมัก</li>
                     </ul>
                 </div>
-                <div class="info-box">
-                    <h3>💡 แนวทางปฏิบัติและคำแนะนำทั่วไป</h3>
-                    <ul>
-                        <li>ตรวจสอบค่าฝุ่นเป็นประจำผ่านทางหน้าเว็บ AIRWISE</li>
-                        <li>หลีกเลี่ยงกิจกรรมกลางแจ้งเมื่อค่าฝุ่นเปลี่ยนเป็นสีส้มหรือแดง</li>
-                        <li>สวมหน้ากากอนามัยชนิด N95 ทุกครั้งเมื่อจำเป็นต้องออกไปข้างนอก</li>
+
+                <div class="info-box" style="border-top-color: #8b5cf6;">
+                    <h3 class="zone-title" data-zone="2">⛰️ 2. โซนภูเขา</h3>
+                    <p class="zone-sub" data-zone="2" style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">(ลานสกา, พรหมคีรี, นบพิตำ, พิปูน, ฉวาง, ถ้ำพรรณรา, ช้างกลาง, จุฬาภรณ์)</p>
+                    <h4 class="cause-heading" style="color: #ef4444; margin-bottom: 0.5rem; font-size: 1rem;">⚠️ สาเหตุหลัก</h4>
+                    <ul class="cause-list" data-zone="2" style="margin-bottom: 1rem;">
+                        <li>การเผากิ่งไม้ ใบไม้ และการจัดการพื้นที่ในสวนยางพารา</li>
+                        <li>ฝุ่นจากโรงงานแปรรูปไม้ยางพารา</li>
+                        <li>ฝุ่นและสารเคมีจากการกำจัดวัชพืชทางการเกษตร</li>
+                    </ul>
+                    <h4 class="prevent-heading" style="color: #10b981; margin-bottom: 0.5rem; font-size: 1rem;">💡 วิธีป้องกันและแก้ไข</h4>
+                    <ul class="prevent-list" data-zone="2">
+                        <li>ลดการเผา ใช้วิธีไถกลบหรือทำปุ๋ยอินทรีย์แทน</li>
+                        <li>เลี่ยงพื้นที่โรงเลื่อย หรือสวมหน้ากากป้องกันฝุ่นไม้</li>
+                        <li>ใช้สารเคมีอย่างถูกวิธี และปลูกต้นไม้เพิ่มตามเชิงเขา</li>
                     </ul>
                 </div>
+
+                <div class="info-box" style="border-top-color: #f59e0b;">
+                    <h3 class="zone-title" data-zone="3">🏭 3. โซนอุตสาหกรรม</h3>
+                    <p class="zone-sub" data-zone="3" style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">(เมือง, ทุ่งสง, ร่อนพิบูลย์, ทุ่งใหญ่)</p>
+                    <div class="ind-subzone" data-sub="muang">
+                        <strong style="color: #475569; font-size: 0.95rem;">📍 อ.เมือง (จราจร/ก่อสร้าง)</strong>
+                        <ul style="margin-bottom: 0.8rem; margin-top: 0.3rem;">
+                            <li><span style="color: #ef4444;">สาเหตุ:</span> ควันรถยนต์หนาแน่น ฝุ่นจากถนนและงานก่อสร้าง</li>
+                            <li><span style="color: #10b981;">ป้องกัน:</span> พัฒนาขนส่งสาธารณะ ตรวจควันดำ รดน้ำลดฝุ่น</li>
+                        </ul>
+                    </div>
+                    <div class="ind-subzone" data-sub="thongsong">
+                        <strong style="color: #475569; font-size: 0.95rem;">📍 อ.ทุ่งสง & ร่อนพิบูลย์ (ปูนซีเมนต์/เหมือง)</strong>
+                        <ul style="margin-bottom: 0.8rem; margin-top: 0.3rem;">
+                            <li><span style="color: #ef4444;">สาเหตุ:</span> เหมืองหิน โรงโม่ การระเบิดหิน รถบรรทุกขนส่ง</li>
+                            <li><span style="color: #10b981;">ป้องกัน:</span> ติดระบบดักฝุ่น รดน้ำเหมือง คลุมผ้าใบรถบรรทุก</li>
+                        </ul>
+                    </div>
+                    <div class="ind-subzone" data-sub="thungyai">
+                        <strong style="color: #475569; font-size: 0.95rem;">📍 อ.ทุ่งใหญ่ (โรงเลื่อย/ขยะ)</strong>
+                        <ul style="margin-top: 0.3rem;">
+                            <li><span style="color: #ef4444;">สาเหตุ:</span> โรงงานเลื่อยไม้ และปัญหาการลักลอบเผาขยะ</li>
+                            <li><span style="color: #10b981;">ป้องกัน:</span> คัดแยกขยะอย่างจริงจัง สวมหน้ากากกันฝุ่น</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-box" style="border-top-color: #10b981;">
+                    <h3 class="zone-title" data-zone="4">🌾 4. โซนเกษตรกรรม</h3>
+                    <p class="zone-sub" data-zone="4" style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">(ชะอวด, บางขัน, นาบอน, พระพรหม, เฉลิมพระเกียรติ)</p>
+                    <h4 class="cause-heading" style="color: #ef4444; margin-bottom: 0.5rem; font-size: 1rem;">⚠️ สาเหตุหลัก</h4>
+                    <ul class="cause-list" data-zone="4" style="margin-bottom: 1rem;">
+                        <li>เผาฟางข้าว (พระพรหม, เฉลิมพระเกียรติ)</li>
+                        <li>เผาใบยางพารา และไฟไหม้ป่าพรุ (ชะอวด, บางขัน, นาบอน)</li>
+                        <li>หมอกควันข้ามแดนจากพื้นที่อื่นพัดเข้ามา</li>
+                    </ul>
+                    <h4 class="prevent-heading" style="color: #10b981; margin-bottom: 0.5rem; font-size: 1rem;">💡 วิธีป้องกันและแก้ไข</h4>
+                    <ul class="prevent-list" data-zone="4">
+                        <li>ไถกลบตอซัง นำไปผลิตปุ๋ยหรือเชื้อเพลิงชีวมวลแทน</li>
+                        <li>จัดทำแนวกันไฟ เฝ้าระวังไฟป่าพรุ และปลูกต้นไม้กันลม</li>
+                        <li>ติดตามค่าฝุ่น และประสานงานลดการเผาช่วงวิกฤต</li>
+                    </ul>
+                </div>
+
             </div>
         </section>
 
@@ -167,7 +233,7 @@
     <footer>
         <div class="footer-content">
             <p>© 2026 AIRWISE - Nakhon Si Thammarat PM2.5 Realtime Monitor Project</p>
-            <p class="footer-sub">พัฒนาขึ้นเพื่อสืบสานนวัตกรรมข้อมูลสุขภาพของชุมชนและโรงเรียนในพื้นที่</p>
+            <p class="footer-sub" id="footer-desc">พัฒนาขึ้นเพื่อสืบสานนวัตกรรมข้อมูลสุขภาพของชุมชนและโรงเรียนในพื้นที่</p>
         </div>
     </footer>
 
