@@ -434,3 +434,56 @@ footer {
     .hero-banner { padding: 2rem; }
     .hero-content h1 { font-size: 2rem; }
 }
+/* ==========================================
+   📱 Responsive Design (สำหรับหน้าจอมือถือและแท็บเล็ต)
+   ========================================== */
+@media (max-width: 768px) {
+    /* 1. จัดการส่วนหัวเว็บ (Header & Nav) ให้เรียงแนวตั้งและเลื่อนซ้ายขวาได้ */
+    header {
+        padding: 1rem; 
+        flex-direction: column; 
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .header-left {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    nav {
+        width: 100%;
+        overflow-x: auto; /* ให้เมนูเลื่อนแนวนอนได้ถ้าจอเล็กไป */
+        white-space: nowrap; /* ไม่ให้ข้อความเมนูตกบรรทัด */
+        padding-bottom: 0.5rem;
+        justify-content: flex-start;
+    }
+
+    /* 2. ลดขอบหน้าจอหลักให้พอดีกับมือถือ */
+    main {
+        padding: 1rem;
+    }
+
+    /* 3. จัดการ Layout ให้เรียงแถวเดียว (1 Column) เพื่อลดความอึดอัด */
+    .dashboard-grid, 
+    .info-grid {
+        grid-template-columns: 1fr; /* บังคับให้แสดงคอลัมน์เดียว */
+        gap: 1rem;
+    }
+
+    /* 4. ลดความหนาของพื้นที่ว่าง (Padding) ในกล่องข้อมูล */
+    .info-box, 
+    .weather-card {
+        padding: 1.5rem; 
+    }
+
+    /* 5. ปรับขนาดฟอนต์หัวข้อให้พอดีสายตาบนมือถือ */
+    .section-title h2 {
+        font-size: 1.4rem;
+    }
+
+    /* 6. ปรับขนาดแผนที่ให้ไม่กินพื้นที่แนวตั้งมากเกินไป */
+    #map {
+        height: 350px; 
+    }
+}
