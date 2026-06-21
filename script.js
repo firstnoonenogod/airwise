@@ -442,26 +442,76 @@ if ('speechSynthesis' in window) {
 }
 
 // ==========================================
-// 5. ระบบแผนที่พื้นฐาน
+// 5. ระบบแผนที่พื้นฐาน (อัปเกรดเป็นสไตล์เมืองอัจฉริยะ คลีนและเด่นชัด)
 // ==========================================
 function initMap() {
     const nakhonLatLong = [8.4304, 99.9631];
+    
+    // สร้างแผนที่กำหนดให้อยู่ในตัวแปรหลัก
     const map = L.map('map').setView(nakhonLatLong, 9);
     window.airwiseMap = map;
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+    
+    // 🏙️ เปลี่ยน TileLayer เป็น CartoDB Positron
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
     }).addTo(map);
-    L.marker(nakhonLatLong).addTo(map).bindPopup('<b>ศูนย์ประสานงาน AIRWISE</b>').openPopup();
+    
+    // ปักหมุดพิกัดศูนย์ประสานงานหลัก
+    L.marker(nakhonLatLong).addTo(map)
+        .bindPopup('<b>🏢 ศูนย์ประสานงาน AIRWISE</b><br>ระบบเฝ้าระวังคุณภาพอากาศนครศรีธรรมราช')
+        .openPopup();
 }
 
+// ========================================================
+// 6. ระบบเริ่มต้นทำงานเมื่อโหลดหน้าเว็บ (Event Listener DOMContentLoaded)
+// ========================================================
 window.addEventListener('DOMContentLoaded', () => {
+    // เริ่มทำงานระบบแผนที่และแดชบอร์ดภาพรวม
     initMap();
     loadDashboardData(); 
-
+    
+    // ตั้งค่าปุ่มสลับภาษา TH / EN ให้เชื่อมโยงกับฟังก์ชัน switchLanguage
     const btnTh = document.getElementById("btn-th");
     const btnEn = document.getElementById("btn-en");
-    if (btnTh && btnEn) {
-        btnTh.addEventListener("click", () => switchLanguage('th'));
-        btnEn.addEventListener("click", () => switchLanguage('en'));
+    if (btnTh) btnTh.addEventListener('click', () => switchLanguage('th'));
+    if (btnEn) btnEn.addEventListener('click', () => switchLanguage('en'));
+
+    // ตั้งค่าส่วนควบคุมเมนู 3 ขีด (Mobile Hamburger Menu)
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+        
+        // คลิกที่ลิงก์ในเมนูแล้วให้ปิดแถบลงอัตโนมัติ
+        document.querySelectorAll('#nav-menu .nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+    }
+
+    // ตั้งค่าหน้าต่าง Modal คณะผู้จัดทำโครงงาน (Producer Modal)
+    const btnProducer = document.getElementById('btn-producer');
+    const producerModal = document.getElementById('producer-modal');
+    const closeProducer = document.getElementById('close-producer');
+
+    if (btnProducer && producerModal && closeProducer) {
+        btnProducer.addEventListener('click', () => { 
+            producerModal.style.display = 'flex'; 
+        });
+        closeProducer.addEventListener('click', () => { 
+            producerModal.style.display = 'none'; 
+        });
+        producerModal.addEventListener('click', (e) => { 
+            if (e.target === producerModal) producerModal.style.display = 'none'; 
+        });
     }
 });

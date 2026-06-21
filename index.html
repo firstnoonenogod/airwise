@@ -10,9 +10,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet text">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div class="bg-glow-layer">
+        <div class="glow-circle glow-1"></div>
+        <div class="glow-circle glow-2"></div>
+    </div>
 
     <header>
         <div class="header-left">
@@ -23,23 +29,61 @@
             <div class="logo-subtext">PM2.5 REALTIME MONITOR<br>NAKHON SI THAMMARAT</div>
         </div>
 
-        <nav style="display: flex; align-items: center; gap: 1rem;">
+        <button class="menu-toggle" id="menu-toggle" aria-label="เปิดเมนู">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav id="nav-menu">
             <a href="#home-section" class="nav-link active" id="nav-home">🏠 หน้าแรก</a>
             <a href="#air-quality-section" class="nav-link" id="nav-air">📊 ข้อมูลคุณภาพอากาศ</a>
             <a href="#map-section" class="nav-link" id="nav-map">🗺️ แผนที่มลพิษ</a>
             <a href="#info-section" class="nav-link" id="nav-info">📝 สาเหตุและคำแนะนำ</a>
             
-            <div class="lang-switcher" style="display: flex; gap: 0.2rem; background: #f1f5f9; padding: 0.3rem; border-radius: 20px; border: 1px solid #e2e8f0; margin-left: 0.5rem;">
-                <button id="btn-th" class="active" style="border: none; background: #2563eb; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; cursor: pointer; font-family: 'Kanit', sans-serif; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">TH</button>
-                <button id="btn-en" style="border: none; background: transparent; color: #64748b; padding: 0.3rem 0.8rem; border-radius: 15px; cursor: pointer; font-family: 'Kanit', sans-serif; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">EN</button>
+            <div class="lang-switcher">
+                <button id="btn-th" class="active">TH</button>
+                <button id="btn-en">EN</button>
             </div>
         </nav>
 
         <div class="header-right">
             <img class="school-logo" src="assets/school-logo.png" alt="โลโก้โรงเรียน">
-            <div class="profile-avatar">👨‍💻</div>
+            <button class="producer-btn" id="btn-producer" title="คณะผู้จัดทำ">
+                <i class="fa-solid fa-users"></i>
+            </button>
         </div>
     </header>
+
+    <div class="producer-modal" id="producer-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-producer">&times;</button>
+            <h2 class="modal-title">👥 คณะผู้จัดทำโครงงาน</h2>
+            <div class="producer-grid">
+                <div class="producer-card">
+                    <div class="p-img">
+                        <img src="assets/producer1.jpg" alt="นางสาวณฤดี สุทธิรักษ์">
+                    </div>
+                    <p class="p-name">นางสาวณฤดี สุทธิรักษ์</p>
+                    <p class="p-role">ผู้จัดทำโครงงาน</p>
+                </div>
+                <div class="producer-card">
+                    <div class="p-img">
+                        <img src="assets/producer2.jpg" alt="นางสาวกนกรัชต์ ชื่นชม">
+                    </div>
+                    <p class="p-name">นางสาวกนกรัชต์ ชื่นชม</p>
+                    <p class="p-role">ผู้จัดทำโครงงาน</p>
+                </div>
+                <div class="producer-card">
+                    <div class="p-img">
+                        <img src="assets/producer3.jpg" alt="นายณัฐรพี ชูโชติ">
+                    </div>
+                    <p class="p-name">นายณัฐรพี ชูโชติ</p>
+                    <p class="p-role">ผู้จัดทำโครงงาน</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <main>
         <section id="home-section" class="content-section">
@@ -55,13 +99,13 @@
                 </div>
             </div>
 
-            <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2.5rem;">
+            <div class="dashboard-grid">
                 <div class="info-box" style="border-top: 4px solid #10b981;">
-                    <h3 id="dash-title1" style="font-size: 1.1rem; margin-bottom: 1rem;">🌍 สถานการณ์ภาพรวมจังหวัด</h3>
-                    <div id="provincial-card" style="background: #10b981; color: white; padding: 1.5rem; border-radius: 12px; text-align: center; margin-bottom: 1rem;">
-                        <p id="dash-desc1" style="font-size: 0.9rem; opacity: 0.9;">ค่าเฉลี่ยฝุ่นรวมทั้งจังหวัด</p>
-                        <h2 id="avg-pm-display" style="font-size: 3rem; color: white; margin: 0.3rem 0;">-- <span style="font-size: 1.2rem;">µg/m³</span></h2>
-                        <span id="avg-status-badge" style="background: rgba(255,255,255,0.2); padding: 0.2rem 1rem; border-radius: 20px; font-size: 0.85rem;">กำลังคำนวณ...</span>
+                    <h3 id="dash-title1">🌍 สถานการณ์ภาพรวมจังหวัด</h3>
+                    <div id="provincial-card">
+                        <p id="dash-desc1">ค่าเฉลี่ยฝุ่นรวมทั้งจังหวัด</p>
+                        <h2 id="avg-pm-display">-- <span style="font-size: 1.2rem;">µg/m³</span></h2>
+                        <span id="avg-status-badge">กำลังคำนวณ...</span>
                     </div>
                     <div style="font-size: 0.9rem; color: #64748b; line-height: 1.8;">
                         <p id="dash-update">📍 ข้อมูลอัปเดต: เรียลไทม์จากระบบเครือข่าย</p>
@@ -70,7 +114,7 @@
                 </div>
 
                 <div class="info-box" style="border-top: 4px solid #ef4444;">
-                    <h3 id="dash-title2" style="font-size: 1.1rem; margin-bottom: 1rem;">⚠️ พื้นที่เฝ้าระวังค่าฝุ่นสูงสุด (Top 3)</h3>
+                    <h3 id="dash-title2">⚠️ พื้นที่เฝ้าระวังค่าฝุ่นสูงสุด (Top 3)</h3>
                     <div id="top-dangerous-list" style="display: flex; flex-direction: column; gap: 0.8rem;">
                         <p style="color: #64748b; font-size: 0.95rem;" id="loading-top3">กำลังโหลดข้อมูลการจัดอันดับ...</p>
                     </div>
@@ -147,7 +191,6 @@
             </div>
             
             <div class="info-grid" id="knowledge-grid">
-                
                 <div class="info-box" style="border-top-color: #0ea5e9;">
                     <h3 class="zone-title" data-zone="1">🌊 1. โซนทะเล</h3>
                     <p class="zone-sub" data-zone="1" style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">(ขนอม, สิชล, ท่าศาลา, ปากพนัง, หัวไทร, เชียรใหญ่)</p>
@@ -224,10 +267,8 @@
                         <li>ติดตามค่าฝุ่น และประสานงานลดการเผาช่วงวิกฤต</li>
                     </ul>
                 </div>
-
             </div>
         </section>
-
     </main>
 
     <footer>
