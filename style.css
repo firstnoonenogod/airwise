@@ -931,37 +931,56 @@ body {
     }
 }
 @media (max-width: 768px) {
+    /* บังคับหัวเว็บให้กลับมาเรียงเป็นแนวนอนแถวเดียว ไม่ซ้อนเป็นแนวตั้ง */
     header {
         display: flex !important;
+        flex-direction: row !important; /* เปลี่ยนจากแนวตั้งให้เป็นแนวนอน */
+        justify-content: space-between !important; /* กระจายองค์ประกอบ ซ้าย - กลาง - ขวา */
         align-items: center !important;
-        padding: 0.8rem 1rem !important;
+        padding: 0.6rem 1rem !important;
+        width: 100% !important;
     }
 
-    /* 1. บังคับปุ่ม 3 ขีดให้อยู่ซ้ายสุดเป็นอันดับแรก */
+    /* 1. บังคับปุ่ม 3 ขีด (Hamburger Menu) ให้ไปอยู่ฝั่งซ้ายสุด */
     .menu-toggle {
         display: flex !important;
-        order: -1 !important; /* ค่า -1 ทำให้โดนดึงมาอยู่ซ้ายสุดเสมอ */
-        margin-right: 15px !important; /* เว้นระยะห่างจากโลโก้ */
-        margin-left: 0 !important;
+        order: 1 !important; /* ลำดับแรกสุด */
+        margin: 0 !important;
     }
 
-    /* 2. โลโก้ AIRWISE ให้อยู่ถัดมาตรงกลาง */
+    /* 2. จัดโลโก้ AIRWISE ให้อยู่ตรงกลางแถวอย่างสมดุล */
     .header-left {
-        order: 0 !important;
-        flex-grow: 1 !important; /* ช่วยดันไอคอนฝั่งขวาให้ชิดขอบจอ */
         display: flex !important;
+        flex-direction: row !important;
         align-items: center !important;
+        justify-content: center !important;
+        order: 2 !important; /* ลำดับที่สอง */
+        flex-grow: 1 !important;
+        gap: 0.5rem !important;
+        margin: 0 !important;
+    }
+
+    .logo-box {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 1.1rem !important; /* ปรับขนาดตัวอักษรให้พอดีไม่ล้นจอ */
     }
 
     .logo-subtext {
-        display: none !important; /* ซ่อนข้อความยาวๆ เพื่อไม่ให้โลโก้เบียดปุ่ม */
+        display: none !important; /* ซ่อนคำอธิบายยาวๆ บนมือถือ เพื่อไม่ให้เบียดปุ่มอื่น */
     }
 
-    /* 3. กลุ่มปุ่มผู้จัดทำและโลโก้โรงเรียน ให้อยู่ขวาสุด */
+    /* 3. จัดกลุ่มโลโก้โรงเรียนและปุ่มผู้จัดทำให้อยู่ฝั่งขวาสุด */
     .header-right {
-        order: 1 !important;
         display: flex !important;
         align-items: center !important;
-        gap: 10px !important;
+        justify-content: flex-end !important;
+        order: 3 !important; /* ลำดับสุดท้าย */
+        gap: 0.6rem !important;
+        margin: 0 !important;
+    }
+
+    .school-logo {
+        height: 35px !important; /* ย่อขนาดโลโก้โรงเรียนลงเล็กน้อยให้เข้ากับแถว */
+        width: auto !important;
     }
 }
