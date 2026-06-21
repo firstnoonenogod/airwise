@@ -708,21 +708,44 @@ footer {
     transition: 0.3s;
 }
 
-@media (max-width: 768px) {
-    .menu-toggle { display: flex; order: 2; }
-    .header-left { order: 1; }
-    .header-right { display: none; } /* ซ่อนขวาเดิมเพื่อเอาปุ่มมาใส่ในเมนู */
-
-    nav#nav-menu {
-        position: fixed; top: 80px; left: 0; width: 100%;
-        background: white; flex-direction: column !important;
-        padding: 2rem; gap: 1.5rem !important;
-        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-        display: none; z-index: 1500;
+@media screen and (max-width: 768px) {
+    /* 1. จัด Header ให้อ้างอิงตำแหน่งและให้โลโก้อยู่ตรงกลาง */
+    header {
+        position: relative !important; /* สำคัญ: เพื่อเป็นกรอบให้ปุ่ม 3 ขีด */
+        justify-content: center !important; /* ดันโลโก้ไปตรงกลาง */
+        padding: 0.8rem 1rem !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        width: 100% !important;
     }
-    nav#nav-menu.active { display: flex; }
-    
-    .producer-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+    /* 2. บังคับปุ่ม 3 ขีด ลอยตัวชิดซ้ายสุดเสมอ */
+    .menu-toggle {
+        display: flex !important;
+        position: absolute !important; /* สั่งให้ลอยตัว */
+        left: 1rem !important; /* ชิดขอบซ้ายที่ระยะ 1rem */
+        top: 50% !important;
+        transform: translateY(-50%) !important; /* จัดให้อยู่กึ่งกลางแนวตั้งพอดี */
+        margin: 0 !important;
+        z-index: 1001 !important; /* ให้อยู่บนสุดเสมอ */
+    }
+
+    /* 3. จัดโลโก้ AIRWISE */
+    .header-left {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 auto !important; /* จัดกึ่งกลางอัตโนมัติ */
+    }
+
+    .logo-box {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 1.1rem !important;
+    }
+
+    .logo-subtext {
+        display: none !important; /* ซ่อนคำอธิบายยาวๆ บนมือถือ */
+    }
 }
 /* ========================================================
    🇨🇭 LANGUAGE SWITCHER RESTORATION (กู้คืนปุ่มสลับภาษาดั้งเดิม)
