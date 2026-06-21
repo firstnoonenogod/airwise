@@ -930,3 +930,38 @@ body {
         display: flex !important;
     }
 }
+@media (max-width: 768px) {
+    header {
+        display: flex !important;
+        align-items: center !important;
+        padding: 0.8rem 1rem !important;
+    }
+
+    /* 1. บังคับปุ่ม 3 ขีดให้อยู่ซ้ายสุดเป็นอันดับแรก */
+    .menu-toggle {
+        display: flex !important;
+        order: -1 !important; /* ค่า -1 ทำให้โดนดึงมาอยู่ซ้ายสุดเสมอ */
+        margin-right: 15px !important; /* เว้นระยะห่างจากโลโก้ */
+        margin-left: 0 !important;
+    }
+
+    /* 2. โลโก้ AIRWISE ให้อยู่ถัดมาตรงกลาง */
+    .header-left {
+        order: 0 !important;
+        flex-grow: 1 !important; /* ช่วยดันไอคอนฝั่งขวาให้ชิดขอบจอ */
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .logo-subtext {
+        display: none !important; /* ซ่อนข้อความยาวๆ เพื่อไม่ให้โลโก้เบียดปุ่ม */
+    }
+
+    /* 3. กลุ่มปุ่มผู้จัดทำและโลโก้โรงเรียน ให้อยู่ขวาสุด */
+    .header-right {
+        order: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+}
