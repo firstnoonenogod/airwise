@@ -434,56 +434,120 @@ footer {
     .hero-banner { padding: 2rem; }
     .hero-content h1 { font-size: 2rem; }
 }
-/* ==========================================
-   📱 Responsive Design (สำหรับหน้าจอมือถือและแท็บเล็ต)
-   ========================================== */
+/* ========================================================
+   📱 Responsive Design (🌟 เวอร์ชันสมบูรณ์ 2.0 หัวเว็บมืออาชีพ + นกฮูกตัวใหญ่)
+   ======================================================== */
 @media (max-width: 768px) {
-    /* 1. จัดการส่วนหัวเว็บ (Header & Nav) ให้เรียงแนวตั้งและเลื่อนซ้ายขวาได้ */
+    /* --- 1. จัดการส่วนหัวเว็บ (Header) แก้ไขปัญหา Cramping ไม่ต้องเลื่อนขวา --- */
     header {
         padding: 1rem; 
-        flex-direction: column; 
-        gap: 1rem;
+        flex-direction: column; /* เรียงโลโก้และเมนูซ้อนแนวตั้ง */
+        align-items: center; /* จัดกึ่งกลางทั้งหมด */
+        gap: 0.8rem;
         text-align: center;
     }
 
     .header-left {
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: column; /* โลโก้และชื่อเว็บซ้อนกัน */
+        margin-bottom: 0.2rem;
     }
 
+    .logo-box {
+        justify-content: center; /* จัดโลโก้กึ่งกลาง */
+    }
+
+    /* 🛑 แก้ไขปัญหาสำคัญ: จัดการเมนูไม่ให้ล้นหน้าจอ (No horizontal scroll) */
     nav {
         width: 100%;
-        overflow-x: auto; /* ให้เมนูเลื่อนแนวนอนได้ถ้าจอเล็กไป */
-        white-space: nowrap; /* ไม่ให้ข้อความเมนูตกบรรทัด */
-        padding-bottom: 0.5rem;
-        justify-content: flex-start;
+        overflow-x: visible; /* 🌟 ปิดการเลื่อนขวา */
+        white-space: normal; /* 🌟 ยอมให้ข้อความตกบรรทัดได้ถ้าจำเป็น */
+        flex-wrap: wrap; /* 🌟 บังคับให้เมนูเรียงบรรทัดใหม่สวยๆ ถ้าหน้าจอเล็กมาก */
+        justify-content: center; /* จัดเมนูกึ่งกลาง */
+        gap: 0.5rem; /* ลดระยะห่างเมนูให้พอดีสายตา */
+        padding-bottom: 0;
     }
 
-    /* 2. ลดขอบหน้าจอหลักให้พอดีกับมือถือ */
+    nav a.nav-link {
+        font-size: 0.85rem; /* ลดขนาดฟอนต์เมนูลงเล็กน้อย */
+        margin: 0.2rem 0; /* เพิ่มพื้นที่ว่างแนวตั้งเล็กน้อยป้องกันการกดสลับปุ่มผิด */
+        padding: 0.4rem 0.6rem; /* เพิ่มขนาดปุ่มให้พอกดง่ายบนจอเล็ก */
+    }
+
+    /* --- 2. จัดการส่วนแสดงผล (Main) ลดความอึดอัด --- */
     main {
         padding: 1rem;
     }
 
-    /* 3. จัดการ Layout ให้เรียงแถวเดียว (1 Column) เพื่อลดความอึดอัด */
+    /* จัด Layout กล่องข้อมูลให้เรียงแถวเดียว */
     .dashboard-grid, 
+    .air-monitor-grid,
     .info-grid {
-        grid-template-columns: 1fr; /* บังคับให้แสดงคอลัมน์เดียว */
-        gap: 1rem;
+        grid-template-columns: 1fr; /* 1 กล่องต่อ 1 แถว */
+        gap: 1.2rem;
     }
 
-    /* 4. ลดความหนาของพื้นที่ว่าง (Padding) ในกล่องข้อมูล */
-    .info-box, 
-    .weather-card {
-        padding: 1.5rem; 
+    /* --- 3. เพิ่มขนาด Wisdom Owl (🌟 ทำนกฮูกตัวใหญ่ขึ้นตามคำขอ) --- */
+    .character-analysis-zone {
+        flex-direction: column; /* 🌟 บนมือถือให้ภาพนกฮูกอยู่บนกล่องข้อความ */
+        align-items: center;
+        margin-top: 1.5rem;
     }
 
-    /* 5. ปรับขนาดฟอนต์หัวข้อให้พอดีสายตาบนมือถือ */
-    .section-title h2 {
-        font-size: 1.4rem;
+    .avatar-wrapper {
+        width: 150px; /* 🌟 เพิ่มขนาดนกฮูกบนมือถือให้ใหญ่ขึ้น 1.5 เท่า */
+        height: 150px;
+        margin-right: 0;
+        margin-bottom: 1.2rem;
+        border-width: 6px; /* เพิ่มขอบให้ดูชัดขึ้น */
     }
 
-    /* 6. ปรับขนาดแผนที่ให้ไม่กินพื้นที่แนวตั้งมากเกินไป */
+    /* ปรับขนาดกล่องข้อความและปุ่มบนมือถือให้เข้ากับนกฮูกตัวใหญ่ */
+    .speech-bubble {
+        width: 100%;
+    }
+    .speech-bubble::before {
+        display: none; /* ซ่อนหางกล่องข้อความเดิมที่อาจจะดูไม่เข้า */
+    }
+
+    #btn-speak {
+        width: 100%;
+    }
+
+    /* --- 4. ปรับขนาดกราฟและแผนที่ --- */
+    #pm-bar-chart {
+        height: 180px; 
+    }
+
     #map {
         height: 350px; 
     }
+}
+
+/* 🌟 เติมส่วนนี้: เพิ่มขนาดนกฮูกบนหน้าจอคอมด้วย (ถ้าต้องการให้ดูโปร) */
+@media (min-width: 769px) {
+    .avatar-wrapper {
+        /* 🌟 ของเดิม 180px ปรับเป็น 360px (2เท่า) */
+        width: 360px;
+        height: 360px;
+        /* ปรับระยะห่างขวาเล็กน้อยเพื่อให้สมดุลกับตัวที่ใหญ่ขึ้น */
+        margin-right: 2.5rem; 
+    }
+}
+
+
+/* --- จุดที่ 2: สำหรับหน้าจอมือถือ (Mobile) --- */
+/* หาคลาส .avatar-wrapper ที่อยู่ภายในบล็อก @media (max-width: 768px) */
+@media (max-width: 768px) {
+    /* ... โค้ดส่วนอื่นๆ ... */
+
+    .avatar-wrapper {
+        /* 🌟 ของเดิม 150px ปรับเป็น 300px (2เท่า) */
+        width: 300px;
+        height: 300px;
+        /* ปรับขอบให้หนาขึ้นเล็กน้อยตามขนาดตัว */
+        border-width: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    /* ... โค้ดส่วนอื่นๆ ... */
 }

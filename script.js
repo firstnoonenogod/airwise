@@ -355,13 +355,44 @@ function renderDashboard(avgPM, top3) {
 }
 
 // ==========================================
-// 4. ระบบเสียงอ่านพากย์ตัวละคร
+// 4. ระบบเสียงอ่านพากย์ตัวละคร + ขยับปากถี่ๆ
 // ==========================================
 const btnSpeak = document.getElementById('btn-speak');
+let mouthAnimationInterval = null; // สำหรับจดจำและเคลียร์ตัวจับเวลาอนิเมชั่น
+let isMouthOpen = false;
+
 if (btnSpeak && 'speechSynthesis' in window) {
+    
+    // ฟังก์ชันทำหน้าที่สลับรูปปากเปิด-ปิดถี่ๆ
+    function doMouthToggling() {
+        const charImg = document.getElementById('character-img');
+        if (!charImg) return;
+        
+        if (window.speechSynthesis.speaking) {
+            charImg.src = isMouthOpen ? 'assets/character-idle.png' : 'assets/character-talking.png';
+            isMouthOpen = !isMouthOpen;
+        }
+    }
+
+    function stopMouthAndReset() {
+        // 1. ล้างลูปเวลาขยับปากทิ้ง
+        if (mouthAnimationInterval) {
+            clearInterval(mouthAnimationInterval);
+            mouthAnimationInterval = null;
+        }
+        // 2. คืนรูปนกฮูกท่านิ่ง
+        const charImg = document.getElementById('character-img');
+        if (charImg) charImg.src = 'assets/character-idle.png';
+        isMouthOpen = false;
+        // 3. เปลี่ยนคำที่ปุ่มกลับมาเป็นค่าเริ่มต้น
+        btnSpeak.innerHTML = translations[currentLang].btnSpeakIdle;
+    }
+
     btnSpeak.addEventListener('click', () => {
         if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel(); return;
+            window.speechSynthesis.cancel();
+            stopMouthAndReset();
+            return;
         }
         
         let textToSpeak = "";
@@ -385,22 +416,17 @@ if (btnSpeak && 'speechSynthesis' in window) {
         if (engVoice) utterance.voice = engVoice;
 
         utterance.onstart = () => {
-            const charImg = document.getElementById('character-img');
-            if (charImg) charImg.src = 'assets/character-talking.png';
             btnSpeak.innerHTML = translations[currentLang].btnSpeakActive;
+            
+            // 🌟 ขยับปากถี่ๆ: ตั้งให้สลับรูปภาพทุกๆ 350 มิลลิวินาที (ถี่ขึ้นและกำลังพอดีกับการพูดภาษาอังกฤษ)
+            if (mouthAnimationInterval) clearInterval(mouthAnimationInterval);
+            mouthAnimationInterval = setInterval(doMouthToggling, 350);
         };
 
-        utterance.onend = () => {
-            const charImg = document.getElementById('character-img');
-            if (charImg) charImg.src = 'assets/character-idle.png';
-            btnSpeak.innerHTML = translations[currentLang].btnSpeakIdle;
-        };
-
+        utterance.onend = stopMouthAndReset;
         utterance.onerror = (event) => {
             console.error('Speech Error:', event);
-            const charImg = document.getElementById('character-img');
-            if (charImg) charImg.src = 'assets/character-idle.png';
-            btnSpeak.innerHTML = translations[currentLang].btnSpeakIdle;
+            stopMouthAndReset();
         };
 
         window.speechSynthesis.cancel();
