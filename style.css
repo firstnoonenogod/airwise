@@ -1007,3 +1007,119 @@ body {
         width: auto !important;
     }
 }
+@media screen and (max-width: 768px) {
+    /* 1. จัดกรอบ Header ใหม่ บังคับความสูงและระยะขอบให้สวยงาม */
+    header {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 12px 16px !important; /* เพิ่มระยะบน-ล่าง ให้โลโก้มีพื้นที่หายใจ */
+        min-height: 65px !important; /* บังคับความสูงขั้นต่ำ */
+        width: 100% !important;
+    }
+
+    /* 2. ปุ่ม 3 ขีด กลับมาอยู่ในแถวปกติ (ชิดซ้ายธรรมชาติ) */
+    .menu-toggle {
+        position: relative !important; /* ยกเลิกการลอยตัวของเดิม */
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        display: flex !important;
+        margin: 0 !important;
+        z-index: 1001 !important;
+    }
+
+    /* 3. บังคับโลโก้ AIRWISE ให้อยู่กึ่งกลางจอเป๊ะๆ (ทั้งแนวตั้งและแนวนอน) */
+    .header-left {
+        position: absolute !important; /* ให้โลโก้ลอยตัวแทน */
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important; /* สูตรจัดกึ่งกลาง Absolute สมบูรณ์แบบ */
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        margin: 0 !important;
+        width: auto !important;
+    }
+
+    .logo-box {
+        padding: 6px 12px !important;
+        font-size: 1.1rem !important;
+        margin: 0 !important;
+    }
+
+    .logo-subtext {
+        display: none !important; /* ซ่อนข้อความยาวๆ ในมือถือ */
+    }
+}
+/* =========================================
+   📱 โหมดมือถือแบบสมบูรณ์ (พร้อมใช้)
+   นำไปวางไว้ "ล่างสุด" ของไฟล์ style.css
+   ========================================= */
+@media screen and (max-width: 768px) {
+    
+    /* 1. จัดระเบียบ Header (3 ขีดอยู่ซ้าย โลโก้อยู่ตรงกลางเป๊ะ) */
+    header {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 12px 16px !important; 
+        min-height: 65px !important; 
+        width: 100% !important;
+    }
+
+    .menu-toggle {
+        position: relative !important; 
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        display: flex !important;
+        margin: 0 !important;
+        z-index: 1001 !important;
+    }
+
+    .header-left {
+        position: absolute !important; 
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important; 
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        margin: 0 !important;
+        width: auto !important;
+    }
+
+    .logo-box {
+        padding: 6px 12px !important;
+        font-size: 1.1rem !important;
+        margin: 0 !important;
+    }
+
+    .logo-subtext {
+        display: none !important; /* ซ่อนข้อความยาวๆ ไปก่อน */
+    }
+
+    /* 2. แก้ไขหน้าต่างคณะผู้จัดทำ (ให้เรียงแนวตั้งและไถเลื่อนดูได้ครบ 3 คน) */
+    #producer-modal > div {
+        max-height: 85vh !important; 
+        overflow-y: auto !important; 
+        padding: 1.5rem !important;
+        width: 95% !important;
+    }
+
+    #producer-modal div {
+        flex-direction: column !important; 
+    }
+
+    #producer-modal img {
+        width: 120px !important; 
+        height: 120px !important;
+        margin: 0 auto 10px auto !important; 
+    }
+
+    #producer-modal h3, 
+    #producer-modal p {
+        text-align: center !important;
+    }
+}
