@@ -861,19 +861,72 @@ body {
 .p-role { font-size: 0.85rem; color: #2563eb; background: #eff6ff; padding: 0.2rem 0.6rem; border-radius: 12px; }
 
 @media (max-width: 768px) {
-    header { padding: 0.8rem 1.5rem !important; }
-    .menu-toggle { display: flex !important; }
-    nav#nav-menu {
-        position: fixed !important; top: 73px; left: 0; width: 100%;
-        background: rgba(255, 255, 255, 0.98); box-shadow: 0 12px 20px rgba(0,0,0,0.08); padding: 1.5rem;
-        flex-direction: column !important; align-items: stretch !important; gap: 1rem !important;
-        display: none !important; z-index: 1000;
+    header {
+        padding: 0.8rem 1rem !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
     }
-    nav#nav-menu.active { display: flex !important; }
-    .header-right { gap: 0.6rem !important; }
-    .school-logo { height: 35px !important; }
-    .producer-btn { width: 35px; height: 35px; font-size: 0.95rem; }
-    .producer-grid { grid-template-columns: 1fr; gap: 1rem; }
-    .producer-card { display: flex; align-items: center; text-align: left; gap: 1rem; }
-    .p-img { margin: 0; width: 70px; height: 70px; }
+
+    /* 🛠️ ตั้งค่าให้ปุ่ม 3 ขีดอยู่ซ้ายสุด และดันองค์ประกอบอื่นไปทางขวา */
+    .menu-toggle {
+        display: flex !important;
+        order: 1; /* ลำดับที่ 1 ซ้ายสุด */
+        margin-right: 0.8rem;
+    }
+
+    /* จัดกลุ่มโลโก้ให้อยู่ถัดมาจากปุ่ม 3 ขีด */
+    .header-left {
+        order: 2; /* ลำดับที่ 2 */
+        flex-grow: 1; /* ขยายพื้นที่ให้เต็ม */
+        gap: 0.5rem !important;
+    }
+
+    .logo-box {
+        padding: 0.3rem 0.6rem !important;
+    }
+
+    .logo-text {
+        font-size: 1rem !important;
+    }
+
+    .logo-subtext {
+        display: none !important; /* ซ่อนข้อความยาวบนมือถือเพื่อไม่ให้เบียดกัน */
+    }
+
+    /* จัดกลุ่มโลโก้โรงเรียนและกลุ่มผู้จัดทำไว้ขวาสุด */
+    .header-right {
+        order: 3; /* ลำดับที่ 3 ขวาสุด */
+        gap: 0.5rem !important;
+    }
+
+    .school-logo {
+        height: 32px !important;
+    }
+
+    .producer-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    /* ปรับแต่งตำแหน่งของเมนูเมื่อกดเปิดให้เลื่อนลงมาสอดคล้องกับหัวเว็บ */
+    nav#nav-menu {
+        position: fixed !important;
+        top: 62px; /* ขยับตามความสูง Header มือถือ */
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        padding: 1.5rem;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem !important;
+        display: none !important;
+        z-index: 1000;
+    }
+
+    nav#nav-menu.active {
+        display: flex !important;
+    }
 }
