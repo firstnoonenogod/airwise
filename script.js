@@ -442,28 +442,79 @@ if ('speechSynthesis' in window) {
 }
 
 // ==========================================
-// 5. ระบบแผนที่พื้นฐาน (อัปเกรดเป็นสไตล์เมืองอัจฉริยะ คลีนและเด่นชัด)
+// 5. ระบบแผนที่พื้นฐาน + แสดงจุดค่าฝุ่นทุกอำเภออัตโนมัติ
 // ==========================================
-function initMap() {
+async function initMap() {
     const nakhonLatLong = [8.4304, 99.9631];
     
-    // สร้างแผนที่กำหนดให้อยู่ในตัวแปรหลัก
+    // 1. สร้างแผนที่
     const map = L.map('map').setView(nakhonLatLong, 9);
     window.airwiseMap = map;
     
-    // 🏙️ เปลี่ยน TileLayer เป็น CartoDB Positron
+    // 2. เรียกใช้พื้นหลังแผนที่เมืองอัจฉริยะแบบคลีน (CartoDB Positron)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         maxZoom: 20
     }).addTo(map);
     
-    // ปักหมุดพิกัดศูนย์ประสานงานหลัก
-    L.marker(nakhonLatLong).addTo(map)
-        .bindPopup('<b>🏢 ศูนย์ประสานงาน AIRWISE</b><br>ระบบเฝ้าระวังคุณภาพอากาศนครศรีธรรมราช')
-        .openPopup();
-}
+    // 3. วนลูปดึงข้อมูลฝุ่นของทุกอำเภอมาปักจุดลงบนแผนที่
+    for (const [name, coords] of Object.entries(amphoeCoordinates)) {
+        try {
+            // ดึงข้อมูลจาก OpenWeather API รายอำเภอ
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${coords.lat}&lon=${coords.lon}&appid=${OPENWEATHER_API_KEY}`);
+            const data = await response.json();
+            const pm25 = Math.round(data.list[0].components.pm2_5);
+            
+            // บันทึกค่าลงแคชเพื่อป้องกันการโหลดซ้ำเมื่อเปลี่ยนหน้า/เปลี่ยนภาษา
+            cachedAmphoeData[name] = pm25;
 
+            // กำหนดสีตามเกณฑ์ค่าฝุ่น
+            let color = "#10b981"; // อากาศดีมาก (เขียว)
+            let statusName = currentLang === 'en' ? "Excellent" : "ดีมาก";
+            
+            if (pm25 > 15 && pm25 <= 37.5) {
+                color = "#f59e0b"; // ปานกลาง (ส้ม/เหลือง)
+                statusName = currentLang === 'en' ? "Moderate" : "ปานกลาง";
+            } else if (pm25 > 37.5) {
+                color = "#ef4444"; // เริ่มมีผลกระทบ (แดง)
+                statusName = currentLang === 'en' ? "Unhealthy" : "เริ่มมีผลกระทบ";
+            }
+
+            // 4. สร้างวงกลมโปร่งแสงแสดงพื้นที่ความเข้มข้นมลพิษ
+            L.circle([coords.lat, coords.lon], {
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.4,
+                radius: 4500 // ขนาดรัศมีวงกลมบนแผนที่ (เมตร) สามารถปรับเพิ่ม-ลดได้
+            }).addTo(map).bindPopup(`
+                <div style="font-family: 'Kanit', sans-serif; direction: ltr; text-align: left;">
+                    <strong style="font-size: 1rem; color: #1e293b;">
+                        ${currentLang === 'en' ? 'District: ' + (amphoeNamesEN[name] || name) : 'อำเภอ' + name}
+                    </strong>
+                    <div style="margin-top: 5px; font-size: 0.9rem;">
+                        <b>PM2.5:</b> <span style="color:${color}; font-weight:bold;">${pm25} µg/m³</span><br>
+                        <b>${currentLang === 'en' ? 'Status' : 'สถานะ'}:</b> <span style="color:${color}; font-weight:bold;">${statusName}</span>
+                    </div>
+                </div>
+            `);
+
+            // 5. สร้างตัวเลขค่าฝุ่น (Custom Text Icon) ลอยเด่นอยู่ตรงกลางวงกลม
+            const textIcon = L.divIcon({
+                className: 'map-dust-number',
+                html: `<div style="background-color: ${color}; color: white; font-weight: bold; font-family: 'Kanit', sans-serif; padding: 2px 6px; border-radius: 8px; font-size: 11px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); white-space: nowrap;">${pm25}</div>`,
+                iconSize: [25, 20],
+                iconAnchor: [12, 10] // จัดตำแหน่งให้อยู่ตรงกึ่งกลางพิกัดพอดี
+            });
+            
+            L.marker([coords.lat, coords.lon], { icon: textIcon }).addTo(map)
+                .bindPopup(`<b>${currentLang === 'en' ? (amphoeNamesEN[name] || name) : 'อำเภอ' + name}</b>: ${pm25} µg/m³`);
+
+        } catch (error) {
+            console.error(`ไม่สามารถโหลดข้อมูลแผนที่ของอำเภอ ${name} ได้:`, error);
+        }
+    }
+}
 // ========================================================
 // 6. ระบบเริ่มต้นทำงานเมื่อโหลดหน้าเว็บ (Event Listener DOMContentLoaded)
 // ========================================================
