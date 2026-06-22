@@ -39,7 +39,6 @@
             <a href="#home-section" class="nav-link active" id="nav-home">🏠 หน้าแรก</a>
             <a href="#air-quality-section" class="nav-link" id="nav-air">📊 ข้อมูลคุณภาพอากาศ</a>
             <a href="#map-section" class="nav-link" id="nav-map">🗺️ แผนที่มลพิษ</a>
-            <a href="#info-section" class="nav-link" id="nav-info">📝 สาเหตุและคำแนะนำ</a>
             
             <div class="lang-switcher">
                 <button id="btn-th" class="active">TH</button>
@@ -163,6 +162,18 @@
                         <div class="pm-display-value"><span id="pm-num">0</span> <small>µg/m³</small></div>
                         <div class="pm-status-badge" id="pm-badge">กำลังคำนวณ...</div>
                     </div>
+
+                    <div class="district-insights-card" id="district-insights-card" style="display: none;">
+                        <div class="insight-group problem-group">
+                            <h4 style="color: #e11d48; font-weight:600; margin-bottom:0.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> <span id="insight-problem-title">ปัญหาหลักในพื้นที่</span></h4>
+                            <ul id="insight-problems-list" style="list-style:none; padding-left:5px; color:#475569; line-height:1.7;"></ul>
+                        </div>
+                        <hr style="border:0; border-top:1px solid #f1f5f9; margin: 1rem 0;">
+                        <div class="insight-group solution-group">
+                            <h4 style="color: #059669; font-weight:600; margin-bottom:0.5rem;"><i class="fa-solid fa-lightbulb"></i> <span id="insight-solution-title">แนวทางแก้ไขและป้องกัน</span></h4>
+                            <ul id="insight-solutions-list" style="list-style:none; padding-left:5px; color:#475569; line-height:1.7;"></ul>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="character-analysis-zone" id="analysis-zone" style="opacity: 0.5; pointer-events: none;">
@@ -185,90 +196,6 @@
             <div id="map"></div>
         </section>
 
-        <section id="info-section" class="content-section" style="display: none;">
-            <div class="section-title">
-                <h2 id="info-main-title">📝 สาเหตุและคำแนะนำในการป้องกันตัว</h2>
-            </div>
-            
-            <div class="info-grid" id="knowledge-grid">
-                <div class="info-box" style="border-top-color: #0ea5e9;">
-                    <h3 class="zone-title" data-zone="1">🌊 1. โซนทะเล</h3>
-                    <p class="zone-sub" data-zone="1" style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">(ขนอม, สิชล, ท่าศาลา, ปากพนัง, หัวไทร, เชียรใหญ่)</p>
-                    <h4 class="cause-heading" style="color: #ef4444; margin-bottom: 0.5rem; font-size: 1rem;">⚠️ สาเหตุหลัก</h4>
-                    <ul class="cause-list" data-zone="1" style="margin-bottom: 1rem;">
-                        <li>เขม่าควันจากเครื่องยนต์เรือประมงและท่อไอเสียรถยนต์</li>
-                        <li>ฝุ่น ควัน และกลิ่นจากโรงงานแปรรูปปลา/อาหารสัตว์</li>
-                        <li>การเผาวัสดุเหลือใช้ทางการเกษตร</li>
-                    </ul>
-                    <h4 class="prevent-heading" style="color: #10b981; margin-bottom: 0.5rem; font-size: 1rem;">💡 วิธีป้องกันและแก้ไข</h4>
-                    <ul class="prevent-list" data-zone="1">
-                        <li>ตรวจสภาพเครื่องยนต์และใช้เชื้อเพลิงสะอาดลดควันดำ</li>
-                        <li>ติดตั้งระบบบำบัดอากาศในโรงงานและเพิ่มพื้นที่สีเขียว</li>
-                        <li>งดการเผาเศษวัสดุเกษตร เปลี่ยนเป็นทำปุ๋ยหมัก</li>
-                    </ul>
-                </div>
-
-                <div class="info-box" style="border-top-color: #8b5cf6;">
-                    <h3 class="zone-title" data-zone="2">⛰️ 2. โซนภูเขา</h3>
-                    <p class="zone-sub" data-zone="2" style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">(ลานสกา, พรหมคีรี, นบพิตำ, พิปูน, ฉวาง, ถ้ำพรรณรา, ช้างกลาง, จุฬาภรณ์)</p>
-                    <h4 class="cause-heading" style="color: #ef4444; margin-bottom: 0.5rem; font-size: 1rem;">⚠️ สาเหตุหลัก</h4>
-                    <ul class="cause-list" data-zone="2" style="margin-bottom: 1rem;">
-                        <li>การเผากิ่งไม้ ใบไม้ และการจัดการพื้นที่ในสวนยางพารา</li>
-                        <li>ฝุ่นจากโรงงานแปรรูปไม้ยางพารา</li>
-                        <li>ฝุ่นและสารเคมีจากการกำจัดวัชพืชทางการเกษตร</li>
-                    </ul>
-                    <h4 class="prevent-heading" style="color: #10b981; margin-bottom: 0.5rem; font-size: 1rem;">💡 วิธีป้องกันและแก้ไข</h4>
-                    <ul class="prevent-list" data-zone="2">
-                        <li>ลดการเผา ใช้วิธีไถกลบหรือทำปุ๋ยอินทรีย์แทน</li>
-                        <li>เลี่ยงพื้นที่โรงเลื่อย หรือสวมหน้ากากป้องกันฝุ่นไม้</li>
-                        <li>ใช้สารเคมีอย่างถูกวิธี และปลูกต้นไม้เพิ่มตามเชิงเขา</li>
-                    </ul>
-                </div>
-
-                <div class="info-box" style="border-top-color: #f59e0b;">
-                    <h3 class="zone-title" data-zone="3">🏭 3. โซนอุตสาหกรรม</h3>
-                    <p class="zone-sub" data-zone="3" style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">(เมือง, ทุ่งสง, ร่อนพิบูลย์, ทุ่งใหญ่)</p>
-                    <div class="ind-subzone" data-sub="muang">
-                        <strong style="color: #475569; font-size: 0.95rem;">📍 อ.เมือง (จราจร/ก่อสร้าง)</strong>
-                        <ul style="margin-bottom: 0.8rem; margin-top: 0.3rem;">
-                            <li><span style="color: #ef4444;">สาเหตุ:</span> ควันรถยนต์หนาแน่น ฝุ่นจากถนนและงานก่อสร้าง</li>
-                            <li><span style="color: #10b981;">ป้องกัน:</span> พัฒนาขนส่งสาธารณะ ตรวจควันดำ รดน้ำลดฝุ่น</li>
-                        </ul>
-                    </div>
-                    <div class="ind-subzone" data-sub="thongsong">
-                        <strong style="color: #475569; font-size: 0.95rem;">📍 อ.ทุ่งสง & ร่อนพิบูลย์ (ปูนซีเมนต์/เหมือง)</strong>
-                        <ul style="margin-bottom: 0.8rem; margin-top: 0.3rem;">
-                            <li><span style="color: #ef4444;">สาเหตุ:</span> เหมืองหิน โรงโม่ การระเบิดหิน รถบรรทุกขนส่ง</li>
-                            <li><span style="color: #10b981;">ป้องกัน:</span> ติดระบบดักฝุ่น รดน้ำเหมือง คลุมผ้าใบรถบรรทุก</li>
-                        </ul>
-                    </div>
-                    <div class="ind-subzone" data-sub="thungyai">
-                        <strong style="color: #475569; font-size: 0.95rem;">📍 อ.ทุ่งใหญ่ (โรงเลื่อย/ขยะ)</strong>
-                        <ul style="margin-top: 0.3rem;">
-                            <li><span style="color: #ef4444;">สาเหตุ:</span> โรงงานเลื่อยไม้ และปัญหาการลักลอบเผาขยะ</li>
-                            <li><span style="color: #10b981;">ป้องกัน:</span> คัดแยกขยะอย่างจริงจัง สวมหน้ากากกันฝุ่น</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="info-box" style="border-top-color: #10b981;">
-                    <h3 class="zone-title" data-zone="4">🌾 4. โซนเกษตรกรรม</h3>
-                    <p class="zone-sub" data-zone="4" style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">(ชะอวด, บางขัน, นาบอน, พระพรหม, เฉลิมพระเกียรติ)</p>
-                    <h4 class="cause-heading" style="color: #ef4444; margin-bottom: 0.5rem; font-size: 1rem;">⚠️ สาเหตุหลัก</h4>
-                    <ul class="cause-list" data-zone="4" style="margin-bottom: 1rem;">
-                        <li>เผาฟางข้าว (พระพรหม, เฉลิมพระเกียรติ)</li>
-                        <li>เผาใบยางพารา และไฟไหม้ป่าพรุ (ชะอวด, บางขัน, นาบอน)</li>
-                        <li>หมอกควันข้ามแดนจากพื้นที่อื่นพัดเข้ามา</li>
-                    </ul>
-                    <h4 class="prevent-heading" style="color: #10b981; margin-bottom: 0.5rem; font-size: 1rem;">💡 วิธีป้องกันและแก้ไข</h4>
-                    <ul class="prevent-list" data-zone="4">
-                        <li>ไถกลบตอซัง นำไปผลิตปุ๋ยหรือเชื้อเพลิงชีวลมแทน</li>
-                        <li>จัดทำแนวกันไฟ เฝ้าระวังไฟป่าพรุ และปลูกต้นไม้กันลม</li>
-                        <li>ติดตามค่าฝุ่น และประสานงานลดการเผาช่วงวิกฤต</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer>
